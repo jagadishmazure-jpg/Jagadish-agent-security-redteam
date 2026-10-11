@@ -1,0 +1,22 @@
+[project]
+name = "jagadish-agent-security-redteam"
+version = "0.1.0"
+description = "Agentic AI red-teaming as code: attack catalog, layered defenses, deterministic harness, and risk scoring."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Jagadish" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["redteam"]
