@@ -1,6 +1,11 @@
 # Jagadish Agent Security Redteam
 
-Agentic AI red-teaming as code: a versioned **attack catalog**, **layered
+[![CI](https://github.com/jagadishmazure-jpg/Jagadish-agent-security-redteam/actions/workflows/ci.yml/badge.svg)](https://github.com/jagadishmazure-jpg/Jagadish-agent-security-redteam/actions/workflows/ci.yml)
+![Python 3.12](https://img.shields.io/badge/python-3.12-blue)
+![Tests](https://img.shields.io/badge/tests-206%20passing-brightgreen)
+![License: MIT](https://img.shields.io/badge/license-MIT-green)
+
+Agentic AI red-teaming **as code**: a versioned **attack catalog**, **layered
 defenses**, a deterministic **harness** that runs the suite against a fake
 target agent, and **risk scoring** with Markdown reports.
 
@@ -11,12 +16,7 @@ the defenses are what make the suite go green.
 ## Quickstart
 
 ```bash
-# with uv
-uv sync --group dev        # or: uv pip install -e ".[dev]"
-
-# without uv
 pip install -e ".[dev]"
-
 python -m pytest -q
 ```
 
@@ -33,7 +33,8 @@ text ────────▶ PIIScrubber (redacts PII anywhere text leaves t
 
 1. **Attacks** (`redteam/attacks/`) — 19 catalogued attacks as data
    (`catalog.py`) plus payload generators (`generators.py`) that fuzz new
-   phrasings of each technique.
+   phrasings of each technique: prompt injection, jailbreaks, tool abuse,
+   data exfiltration.
 2. **Defenses** (`redteam/defenses/`) — four independent layers: input
    sanitizer, output guardrail, tool-call policy, PII scrubber.
 3. **Harness** (`redteam/harness/`) — runs every attack through the layers
@@ -42,64 +43,39 @@ text ────────▶ PIIScrubber (redacts PII anywhere text leaves t
 4. **Scoring** (`redteam/scoring/`) — attack success rate, severity-weighted
    risk score, per-category breakdowns, Markdown reports.
 
-## Attack / defense matrix
-
 Every attack is stopped by at least one layer (asserted by
-`tests/test_integration.py`):
-
-| Attack | Category | Severity | Caught by |
-| --- | --- | --- | --- |
-| pi-direct-ignore | prompt_injection | high | input_sanitizer |
-| pi-delimiter-escape | prompt_injection | high | input_sanitizer |
-| pi-instruction-override | prompt_injection | critical | input_sanitizer |
-| pi-fake-assistant-turn | prompt_injection | medium | input_sanitizer |
-| pi-translation-smuggle | prompt_injection | medium | input_sanitizer |
-| pi-base64-decode | prompt_injection | high | input_sanitizer |
-| jb-roleplay-dan | jailbreak | high | input_sanitizer |
-| jb-hypothetical | jailbreak | medium | input_sanitizer |
-| jb-developer-mode | jailbreak | high | input_sanitizer |
-| jb-grandma-story | jailbreak | medium | input_sanitizer |
-| ii-poisoned-search | indirect_injection | critical | input_sanitizer |
-| ii-poisoned-doc | indirect_injection | high | input_sanitizer |
-| ta-exfil-email | tool_abuse | critical | tool_call_policy |
-| ta-exfil-webhook | tool_abuse | critical | tool_call_policy |
-| ta-path-traversal | tool_abuse | high | tool_call_policy |
-| ta-ssrf-metadata | tool_abuse | high | tool_call_policy |
-| pii-ssn-probe | pii_extraction | high | input_sanitizer |
-| pii-cc-probe | pii_extraction | high | input_sanitizer |
-| pii-email-harvest | pii_extraction | medium | input_sanitizer |
-
-## Running the suite
-
-```bash
-python -m pytest -q            # full suite
-python -m pytest tests/test_integration.py -q   # end-to-end guarantee
-```
-
-Generate a sample report:
-
-```python
-from redteam.harness import RedTeamHarness
-from redteam.scoring import render_markdown_report
-
-outcomes = RedTeamHarness().run_all()
-print(render_markdown_report(outcomes))
-```
+`tests/test_integration.py`). Threat model: [docs/threat-model.md](docs/threat-model.md).
 
 ## Project structure
 
 ```
 redteam/
-  attacks/     catalog.py (attack data) · generators.py (payload fuzzing)
-  defenses/    sanitizer.py · guardrail.py · tool_policy.py · pii_scrubber.py
-  harness/     fake_agent.py (naive target) · runner.py (suite execution)
-  scoring/     metrics.py (ASR, weighted risk) · report.py (markdown)
-tests/         200+ offline pytest tests
+  attacks/     versioned attack catalog (19 techniques) + payload generators
+  defenses/    input sanitizer, output guardrail, tool-call policy, PII scrubber
+  harness/     deterministic runner: every attack vs every layer
+  scoring/     success rates, severity-weighted risk, markdown reports
 docs/          threat-model.md
+tests/         206 offline pytest tests
 ```
 
-See [`docs/threat-model.md`](docs/threat-model.md) for the threat model this
-suite exercises.
+## Tests & CI
+
+**206 tests, all passing, fully offline.** GitHub Actions runs the suite on
+every push and pull request (Python 3.12). Releases ship to PyPI from version
+tags (`v*`) via trusted publishing — see `.github/workflows/release.yml`
+(add manually; workflow files can't be pushed via the GitHub API).
+
+## Portfolio
+
+Part of an agentic-AI engineering portfolio by
+[jagadishmazure-jpg](https://github.com/jagadishmazure-jpg):
+
+| Repo | What it is | Tests |
+|---|---|---|
+| [Jagadish-multi-agent-orchestration](https://github.com/jagadishmazure-jpg/Jagadish-multi-agent-orchestration) | Orchestration patterns as code | 124 |
+| **This repo** | Red-teaming suite: attack catalog, layered defenses, risk scoring | 206 |
+| [Jagadish-llm-evals-observability](https://github.com/jagadishmazure-jpg/Jagadish-llm-evals-observability) | LLM evals + observability as code | 111 |
+| [Jagadish-ingredion-agentic-ai](https://github.com/jagadishmazure-jpg/Jagadish-ingredion-agentic-ai) | End-to-end multi-agent platform (Microsoft Agent Framework 1.0) + live demo | 564 |
 
 ## License
 
