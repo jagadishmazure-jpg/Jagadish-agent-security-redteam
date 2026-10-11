@@ -1,0 +1,24 @@
+# NOTE: workflow files cannot be pushed via the GitHub API by the repo's
+# automation identity (403 on .github/workflows/*). Add this file manually
+# in the GitHub web UI at .github/workflows/ci.yml, then push.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Run test suite
+        run: python -m pytest -q
