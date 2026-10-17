@@ -8,8 +8,7 @@ the attack/defense matrix in the README.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-
+from dataclasses import dataclass
 
 SEVERITIES = ("low", "medium", "high", "critical")
 CATEGORIES = (
