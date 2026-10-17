@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from redteam.harness.runner import AttackOutcome
 
-
 SEVERITY_WEIGHTS = {"low": 1, "medium": 2, "high": 3, "critical": 4}
 
 

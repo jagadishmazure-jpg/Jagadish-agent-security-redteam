@@ -22,3 +22,5 @@ coverage.xml
 *.swp
 .DS_Store
 Thumbs.db
+.ruff_cache/
+*.pdf

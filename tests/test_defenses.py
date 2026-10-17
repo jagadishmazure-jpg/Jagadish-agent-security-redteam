@@ -5,7 +5,6 @@ import pytest
 from conftest import BENIGN_INPUTS, BENIGN_TOOL_CALLS
 from redteam.attacks.catalog import ATTACKS
 
-
 INPUT_VECTOR_ATTACKS = [a for a in ATTACKS if a.vector in ("user_input", "tool_output")]
 
 

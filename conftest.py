@@ -11,7 +11,6 @@ from redteam.attacks.catalog import ATTACKS
 from redteam.defenses import InputSanitizer, OutputGuardrail, PIIScrubber, ToolCallPolicy
 from redteam.harness import FakeTargetAgent, RedTeamHarness
 
-
 # Benign inputs every defense layer must let through untouched.
 BENIGN_INPUTS = [
     "What's the weather like today?",
